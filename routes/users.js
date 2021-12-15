@@ -74,7 +74,7 @@ router.get("/", async (req, res) => {
 });
 
 //* DELETE a single user from the database
-router.delete("/:userId", [auth, admin], async (req, res) => {
+router.delete("/:userId", [auth], async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
     if (!user)
@@ -82,6 +82,16 @@ router.delete("/:userId", [auth, admin], async (req, res) => {
         .status(400)
         .send(`User with id ${req.params.userId} does not exist!`);
     await user.remove();
+    return res.send(user);
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+
+//* Get users by ID
+router.get("/:userId", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
     return res.send(user);
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
