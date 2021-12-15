@@ -3,6 +3,24 @@ const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
+const medicationSchema = new mongoose.Schema(
+  {
+      name: { type: String, required: true, minLength: 2, maxLength: 50 },
+      strength: {
+        number: { type: String, required: true, minLength: 1 },
+        measurement: { type: String, required: true }
+      },
+      dose: {
+        number: { type: String, required: true, minLength: 1 },
+        form: { type: String, required: true }
+      },
+      frequency: { type: String, required: true, minLength: 1 },
+      quantity: { type: String, required: true, minLength: 1 },
+      refills: { type: String, required: true, minLength: 1 },
+      dateCreated: { type: Date, default: Date()}
+  }
+)
+
 const userSchema = mongoose.Schema({
   name: { type: String, required: true, minLength: 2, maxLength: 50 },
   email: {
@@ -13,6 +31,7 @@ const userSchema = mongoose.Schema({
     maxLength: 255,
   },
   password: { type: String, required: true, minLength: 8, maxLength: 1024 },
+  medications: { type: [medicationSchema], default: [] }
 });
 
 userSchema.methods.generateAuthToken = function () {
