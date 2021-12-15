@@ -17,7 +17,7 @@ const medicationSchema = new mongoose.Schema(
       frequency: { type: String, required: true, minLength: 1 },
       quantity: { type: String, required: true, minLength: 1 },
       refills: { type: String, required: true, minLength: 1 },
-      dateCreated: { type: Date, default: Date()}
+      dateCreated: { type: Date, default: Date() }
   }
 )
 
@@ -62,8 +62,32 @@ const validateLogin = (req) => {
   return schema.validate(req);
 };
 
+const validateMedication = (medication) => {
+  const schema = Joi.object({
+    name: Joi.string().required().min(2).max(50),
+      strength: {
+        number: Joi.string().required().minLength(1),
+        measurement: Joi.string().required()
+      },
+      dose: {
+        number: Joi.string().required().min(1),
+        form: Joi.string().required()
+      },
+      frequency: Joi.string().required().min(1),
+      quantity: Joi.string().required().min(1),
+      refills: Joi.string().required().min(1),
+  });
+  return schema.validate(medication);
+};
+
 const User = mongoose.model("User", userSchema);
 module.exports.User = User;
 module.exports.userSchema = userSchema;
 module.exports.validateUser = validateUser;
 module.exports.validateLogin = validateLogin;
+
+const Medication = mongoose.model('Medication', medicationSchema);
+module.exports.Medication = Medication;
+module.exports.medicationSchema = medicationSchema;
+module.exports.validateMedication = validateMedication;
+module.exports.medicationSchema = medicationSchema;
