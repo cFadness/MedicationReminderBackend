@@ -33,6 +33,7 @@ router.post("/register", async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
+        medications: user.medications,
       });
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
@@ -88,13 +89,13 @@ router.delete("/:userId", [auth], async (req, res) => {
 });
 
 //* GET user by ID
-router.get("/:userId", [auth], async (req, res) => {
+router.get("/", [auth], async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId);
+    const user = await User.findById(req.user._id);
     if (!user)
       return res
         .status(400)
-        .send(`User with id ${req.params.userId} does not exist!`);
+        .send(`User with id ${req.user._id} does not exist!`);
     return res.send(user);
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
@@ -108,9 +109,9 @@ router.get("/:userId", [auth], async (req, res) => {
 
 
 //* GET medications by userID
-router.get('/:userId', [auth], async (req, res) => {
+router.get('/medications', [auth], async (req, res) => {
   try {
-      const user = await User.findById(req.params.userId);
+      const user = await User.findById(req.user._id);
       const medications = user.medications
       return res.send(medications);
   } catch (ex) {

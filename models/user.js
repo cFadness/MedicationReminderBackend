@@ -40,6 +40,7 @@ userSchema.methods.generateAuthToken = function () {
       _id: this._id,
       name: this.name,
       email: this.email,
+      medications: this.medications,
     },
     config.get("JWT_SECRET")
   );
