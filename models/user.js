@@ -7,16 +7,16 @@ const medicationSchema = new mongoose.Schema(
   {
       name: { type: String, required: true, minLength: 2, maxLength: 50 },
       strength: {
-        number: { type: String, required: true, minLength: 1 },
+        number: { type: Number, required: true, minLength: 1 },
         measurement: { type: String, required: true }
       },
       dose: {
-        number: { type: String, required: true, minLength: 1 },
+        number: { type: Number, required: true, minLength: 1 },
         form: { type: String, required: true }
       },
-      frequency: { type: String, required: true, minLength: 1 },
-      quantity: { type: String, required: true, minLength: 1 },
-      refills: { type: String, required: true, minLength: 1 },
+      frequency: { type: Number, required: true, minLength: 1 },
+      quantity: { type: Number, required: true, minLength: 1 },
+      refills: { type: Number, required: true, minLength: 1 },
       dateCreated: { type: Date, default: Date() }
   }
 )
@@ -66,16 +66,16 @@ const validateMedication = (medication) => {
   const schema = Joi.object({
     name: Joi.string().required().min(2).max(50),
       strength: {
-        number: Joi.string().required().minLength(1),
+        number: Joi.number().required().minLength(1),
         measurement: Joi.string().required()
       },
       dose: {
-        number: Joi.string().required().min(1),
+        number: Joi.number().required().min(1),
         form: Joi.string().required()
       },
-      frequency: Joi.string().required().min(1),
-      quantity: Joi.string().required().min(1),
-      refills: Joi.string().required().min(1),
+      frequency: Joi.number().required().min(1),
+      quantity: Joi.number().required().min(1),
+      refills: Joi.number().required().min(1),
   });
   return schema.validate(medication);
 };

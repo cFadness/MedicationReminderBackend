@@ -19,6 +19,9 @@ router.get('/:userId', [auth], async (req, res) => {
 //* POST a medication
 router.post('/', [auth], async (req, res) => {
     try {
+        const { error } = validateMedication(req.body);
+        if (error) return res.status(400).send(error.details[0].message);
+
         const user = await User.findById(req.user._id);
         const medication = new Medication(req.body);
         user.medications.push(medication);
