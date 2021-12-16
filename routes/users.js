@@ -73,14 +73,14 @@ router.get("/", async (req, res) => {
   }
 });
 
-//* DELETE a single user from the database
-router.delete("/:userId", [auth], async (req, res) => {
+//* DELETE your own account
+router.delete("/", [auth], async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId);
+    const user = await User.findById(req.user._id);
     if (!user)
       return res
         .status(400)
-        .send(`User with id ${req.params.userId} does not exist!`);
+        .send(`User with id ${req.user._id} does not exist!`);
     await user.remove();
     return res.send(user);
   } catch (ex) {
@@ -133,6 +133,32 @@ router.post('/medications', [auth], async (req, res) => {
 
   } catch (ex) {
       return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+
+//* DELETE a medication
+router.delete("/medications/:medId", [auth], async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user)
+      return res
+        .status(400)
+        .send(`User with id ${req.user._id} does not exist!`);
+    
+    let tempMedications = user.medications.filter((med) => {
+      if(med._id != (req.params.medId)){
+        return true
+      }
+      else{
+        return false
+      }
+    })
+    user.medications = tempMedications
+
+    await user.save();
+    return res.send(user);
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
   }
 });
 
