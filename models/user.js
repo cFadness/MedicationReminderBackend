@@ -66,7 +66,7 @@ const validateMedication = (medication) => {
   const schema = Joi.object({
     name: Joi.string().required().min(2).max(50),
       strength: {
-        number: Joi.number().required().minLength(1),
+        number: Joi.number().required().min(1),
         measurement: Joi.string().required()
       },
       dose: {
