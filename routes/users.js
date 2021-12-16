@@ -162,4 +162,33 @@ router.delete("/medications/:medId", [auth], async (req, res) => {
   }
 });
 
+//*Edit a medication
+//TODO: NOT FINISHED. Need to complete.
+router.put('/medications/:medId', [auth], async (req, res) => {
+  try {
+      const user = await User.findById(req.user._id);
+      let updatedMeds = user.medications.map((med) => {
+        if(med._id == (req.params.medId)){
+          med = {
+            ...req.body
+          }
+        }
+      })
+      const updatedUser = await User.findByIdAndUpdate(req.user._id, 
+        {
+          medications: updatedMeds
+        },
+        { new: true }
+      );
+
+      if (!user)
+        return res.status(400).send(`The userId "${req.user._id}" does not exist.`);
+        
+      await updatedUser.save();
+      return res.send(updatedUser);
+  } catch (ex) {
+      return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+
 module.exports = router;
