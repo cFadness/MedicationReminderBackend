@@ -16,4 +16,18 @@ router.get('/:userId', [auth], async (req, res) => {
     }
 });
 
+//* POST a medication
+router.post('/', [auth], async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        const medication = new Medication(req.body);
+        user.medications.push(medication);
+        await user.save();
+        return res.send(user);
+
+    } catch (ex) {
+        return res.status(500).send(`Internal Server Error: ${ex}`);
+    }
+});
+
 module.exports = router;
