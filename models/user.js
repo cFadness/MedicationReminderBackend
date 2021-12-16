@@ -90,4 +90,3 @@ const Medication = mongoose.model('Medication', medicationSchema);
 module.exports.Medication = Medication;
 module.exports.medicationSchema = medicationSchema;
 module.exports.validateMedication = validateMedication;
-module.exports.medicationSchema = medicationSchema;

@@ -62,7 +62,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-//* Get all users
+//* GET all users
 router.get("/", async (req, res) => {
   try {
     const users = await User.find();
@@ -87,7 +87,7 @@ router.delete("/:userId", [auth], async (req, res) => {
   }
 });
 
-//* Get users by ID
+//* GET user by ID
 router.get("/:userId", [auth], async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
