@@ -163,29 +163,45 @@ router.delete("/medications/:medId", [auth], async (req, res) => {
 });
 
 //*Edit a medication
-//TODO: NOT FINISHED. Need to complete.
 router.put('/medications/:medId', [auth], async (req, res) => {
   try {
-      const user = await User.findById(req.user._id);
-      let updatedMeds = user.medications.map((med) => {
-        if(med._id == (req.params.medId)){
-          med = {
-            ...req.body
-          }
-        }
-      })
-      const updatedUser = await User.findByIdAndUpdate(req.user._id, 
-        {
-          medications: updatedMeds
-        },
-        { new: true }
-      );
+      // const user = await User.findById(req.user._id);
+      // let updatedMeds = user.medications.map((med) => {
+      //   if(med._id == (req.params.medId)){
+      //     med = {
+      //       ...med,
+      //       ...req.body
+      //     }
+      //   }
+      //   return med
+      // })
+
+      // const updatedUser = await User.findOneAndUpdate({"_id": req.user._id, "medications._id": req.params.medId}, 
+      //   {
+      //     "$set": {
+      //       "medications.$": {
+      //         ..."medications.$",
+      //         ...req.body
+      //       }
+      //     }
+      //   },
+      //   { new: true }
+      // );
+
+      const user = await User.findById(req.user._id)
 
       if (!user)
         return res.status(400).send(`The userId "${req.user._id}" does not exist.`);
-        
-      await updatedUser.save();
-      return res.send(updatedUser);
+
+      const medication = user.medications.id(req.params.medId)
+
+      if (!medication)
+        return res.status(400).send(`The medicationId "${req.params.medId}" does not exist.`);
+
+      medication.set(req.body)
+
+      await user.save();
+      return res.send(user);
   } catch (ex) {
       return res.status(500).send(`Internal Server Error: ${ex}`);
   }
