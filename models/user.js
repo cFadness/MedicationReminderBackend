@@ -17,6 +17,7 @@ const medicationSchema = new mongoose.Schema(
       frequency: { type: Number, required: true, minLength: 1 },
       quantity: { type: Number, required: true, minLength: 1 },
       refills: { type: Number, required: true, minLength: 1 },
+      notifyEnabled: { type: Boolean, default: true },
       dateCreated: { type: Date, default: Date() }
   }
 )
@@ -76,7 +77,7 @@ const validateMedication = (medication) => {
       },
       frequency: Joi.number().required().min(1),
       quantity: Joi.number().required().min(1),
-      refills: Joi.number().required().min(1),
+      refills: Joi.number().required().min(1)
   });
   return schema.validate(medication);
 };
