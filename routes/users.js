@@ -220,4 +220,30 @@ router.get('/pharmacyInfo', [auth], async (req, res) => {
   }
 });
 
+//*Edit pharmacy info
+router.put('/pharmacyInfo', [auth], async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.user._id, 
+      {
+        pharmacyInfo: {
+          name: req.body.name,
+          address: req.body.address,
+          phoneNumber: req.body.phoneNumber
+        }
+      },
+        { new: true }
+        );
+
+        if (!user)
+            return res.status(400).send(`The userId "${req.user._id}"
+            does not exist.`);
+      
+        await user.save();
+
+        return res.send(user);
+} catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+}
+});
+
 module.exports = router;
