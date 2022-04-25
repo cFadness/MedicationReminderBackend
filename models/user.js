@@ -32,7 +32,12 @@ const userSchema = mongoose.Schema({
     maxLength: 255,
   },
   password: { type: String, required: true, minLength: 8, maxLength: 1024 },
-  medications: { type: [medicationSchema], default: [] }
+  medications: { type: [medicationSchema], default: [] },
+  pharmacyInfo: {
+    name: { type: String, default: '' },
+    address: { type: String, default: '' },
+    phoneNumber: { type: String, default: '' }
+  }
 });
 
 userSchema.methods.generateAuthToken = function () {
@@ -42,6 +47,7 @@ userSchema.methods.generateAuthToken = function () {
       name: this.name,
       email: this.email,
       medications: this.medications,
+      pharmacyInfo: this.pharmacyInfo
     },
     config.get("JWT_SECRET")
   );
