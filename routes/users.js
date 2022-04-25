@@ -207,4 +207,15 @@ router.put('/medications/:medId', [auth], async (req, res) => {
   }
 });
 
+//* GET pharmacy info by userID
+router.get('/pharmacyInfo', [auth], async (req, res) => {
+  try {
+      const user = await User.findById(req.user._id);
+      const pharmacyInfo = user.pharmacyInfo
+      return res.send(pharmacyInfo);
+  } catch (ex) {
+      return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+
 module.exports = router;
