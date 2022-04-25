@@ -21,7 +21,8 @@ router.post("/register", async (req, res) => {
       name: req.body.name,
       email: req.body.email,
       password: await bcrypt.hash(req.body.password, salt),
-      medications: req.body.medications
+      medications: req.body.medications,
+      pharmacyInfo: req.body.pharmacyInfo
     });
 
     await user.save();
@@ -34,6 +35,7 @@ router.post("/register", async (req, res) => {
         name: user.name,
         email: user.email,
         medications: user.medications,
+        pharmacyInfo: user.pharmacyInfo
       });
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
